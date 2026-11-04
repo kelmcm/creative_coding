@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crabby Touches Grass</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/",
+        "maplibre-gl": "https://esm.sh/maplibre-gl@4.7.1"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Giant HUD & Controls -->
+  <div id="hud">
+    <div class="sticker-tag">STOMP &amp; SKETCH</div>
+
+    <div class="hud-header">
+      <h1>
+        <span class="title-main">CRABBY CLEANS UP TRASH</span>
+        <span class="badge">GIANT MODE</span>
+      </h1>
+      <p class="subtitle">Tower over the rooftops &amp; paint the streets with neon footsteps</p>
+    </div>
+
+    <!-- Live Stomp & Trash Odometer -->
+    <div class="stomp-ticker">
+      <div class="ticker-cell">
+        <span class="ticker-label">TRASH</span>
+        <span class="ticker-val trash-val" id="live-trash">0</span>
+      </div>
+      <div class="ticker-divider">✦</div>
+      <div class="ticker-cell">
+        <span class="ticker-label">STEPS</span>
+        <span class="ticker-val" id="live-steps">0</span>
+      </div>
+      <div class="ticker-divider">✦</div>
+      <div class="ticker-cell">
+        <span class="ticker-label">TRAIL</span>
+        <span class="ticker-val" id="live-dist">0m</span>
+      </div>
+    </div>
+
+    <div class="controls-grid">
+      <div>
+        <kbd data-key="w">W</kbd><kbd data-key="a">A</kbd><kbd data-key="s">S</kbd><kbd data-key="d">D</kbd> Walk
+      </div>
+      <div><kbd data-key="shift">SHIFT</kbd> Turbo Stomp</div>
+      <div><kbd data-key="q">Q</kbd><kbd data-key="e">E</kbd> / Drag Look</div>
+      <div><kbd data-key="space">SPACE</kbd> Mega Jump</div>
+      <div><kbd data-key="v">V</kbd> POV Switch</div>
+      <div><kbd data-key="c">C</kbd> Ink Toggle</div>
+    </div>
+
+    <div class="toolbar">
+      <label class="control-item">
+        <span class="control-label">DROP ZONE // CITY</span>
+        <select id="city-select">
+          <option value="-74.0060,40.7128">🗽 NYC — Lower Manhattan</option>
+          <option value="-73.9855,40.7580">🚕 NYC — Midtown / Times Sq</option>
+          <option value="139.7671,35.6812">🗼 Tokyo — Marunouchi</option>
+          <option value="2.2945,48.8584">🥐 Paris — Eiffel Tower</option>
+          <option value="-0.0876,51.5136">🎡 London — City of London</option>
+          <option value="-122.4014,37.7946">🌉 SF — Financial District</option>
+          <option value="-87.6298,41.8781">🎷 Chicago — The Loop</option>
+        </select>
+      </label>
+
+      <label class="control-item">
+        <div class="slider-header">
+          <span class="control-label">KAIJU SCALE</span>
+          <strong id="height-val">65m</strong>
+        </div>
+        <input type="range" id="height-slider" min="20" max="180" value="65" />
+      </label>
+
+      <div class="button-row">
+        <button id="camera-btn" type="button">Camera: 3rd Person (V)</button>
+        <button id="style-btn" type="button">Style: Neo-Arcade 3D</button>
+      </div>
+
+      <button id="end-walk-btn" class="end-walk-btn" type="button">★ END WALK &amp; VIEW MAP ★</button>
+    </div>
+  </div>
+
+  <!-- Aerial Map Overview Banner (shown when End Walk is clicked) -->
+  <div id="aerial-banner" class="hidden">
+    <div class="aerial-card">
+      <div class="aerial-sticker">ARTWORK COMPLETE!</div>
+      <div class="aerial-title">YOUR DRAWN MAP // AERIAL VIEW</div>
+      <div class="aerial-stats" id="aerial-stats">0 steps &bull; 0m walked</div>
+      <div class="aerial-hint">Drag to pan &bull; Scroll to zoom &bull; Hit "Resume Walk" to keep stomping</div>
+    </div>
+  </div>
+
+  <!-- First-person subtle vignette & eye-level indicator -->
+  <div id="fpv-overlay" class="hidden">
+    <div class="fpv-reticle">⊕</div>
+    <div class="fpv-label">👁️ GIANT EYE LEVEL // <span id="fpv-eye-height">60m</span> UP</div>
+  </div>
+
+  <!-- Floating Arcade Pickup Toast -->
+  <div id="pickup-toast" class="hidden">🦀 +1 TRASH PICKED UP!</div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
